@@ -25,17 +25,14 @@ It is intended for GitHub users who want to present the language mix of their cu
 
 ## Features
 
-- Adaptive layout: 1–5 languages use one legend column; 6–9 use two columns.
-- Language aggregation: up to 10 entries are shown, with the tenth entry named `Other`.
-- Theme awareness: one SVG responds automatically to GitHub light and dark themes.
-- Configurable appearance: adjust canvas size, spacing, legend layout, donut geometry, text colors, and language colors.
-- High-contrast palette: default hues deliberately separate neighboring languages so tiny slices remain recognizable.
-- Future language support: languages without a predefined color receive a deterministic generated color.
-- Visible tiny slices: minimum display angles and flat caps keep adjacent low-percentage colors distinct.
-- Cache handling: content-hashed SVG filenames prevent stale same-name image caches.
-- Old image cleanup: obsolete generated SVGs with the same prefix are removed automatically.
-- Controllable data scope: profile, forked, and archived repositories are excluded by default.
-- No third-party Python packages: the generator uses only the Python standard library.
+- Adaptive layout: uses one legend column for 1–5 languages and two for 6–9.
+- Language aggregation: shows up to 10 entries, with the last grouping the rest as `Other`.
+- Theme support: one SVG responds automatically to GitHub light and dark themes.
+- Appearance options: adjusts the canvas, spacing, legend, donut size, and colors.
+- Clear colors: assigns stable colors to new languages and preserves tiny slices.
+- Cache updates: creates content-hashed filenames and removes older charts automatically.
+- Data scope: excludes profile, forked, and archived repositories by default, with overrides available.
+- Lightweight runtime: uses only the Python standard library on GitHub-hosted runners.
 
 ## Preview
 
@@ -122,7 +119,7 @@ The example runs automatically every 6 hours and can also be triggered manually.
 
 Open the profile repository's **Actions** page, select the update workflow, and click **Run workflow**. A successful run commits the generated SVG and updated README reference.
 
-## Data Scope and Calculation
+## Data Scope & Calculation
 
 By default, the Action scans public repositories owned by the configured account and applies these rules:
 
@@ -214,7 +211,7 @@ The Action reports `changed=true` only when the SVG content, README reference, o
 
 Scheduled updates require no cross-repo tokens. For immediate refreshes, click **Run workflow** manually.
 
-## Action Inputs and Outputs
+## Action Inputs & Outputs
 
 ### Inputs
 
@@ -233,7 +230,7 @@ Scheduled updates require no cross-repo tokens. For immediate refreshes, click *
 | `image` | Path to the generated versioned SVG |
 | `changed` | `true` when the SVG, README, or old generated files changed; otherwise `false` |
 
-## Versioning and Security
+## Versioning & Security
 
 - Latest stable release: use the workflow above to resolve and check out the latest stable release through the Releases API.
 - Full release tag: select and pin one from [Releases](https://github.com/KrelinnBios/github-profile-language-donut/releases) when upgrades should remain explicit.
@@ -273,6 +270,6 @@ Tests cover one-column layout, two-column layout, `Other` aggregation, generated
 
 This project is released under the [MIT License](./LICENSE), which permits use, modification, distribution, and commercial use provided that the license and copyright notice are retained.
 
-## Feedback and Contributions
+## Feedback & Contributions
 
 Issues, layout compatibility reports, language color suggestions, documentation improvements, and feature requests are welcome through [GitHub Issues](https://github.com/KrelinnBios/github-profile-language-donut/issues).
