@@ -266,9 +266,21 @@ python -m unittest discover -s tests -v
 
 Tests cover one-column layout, two-column layout, `Other` aggregation, generated colors for unknown languages, and versioned image cleanup.
 
+## Data & Privacy
+
+- The Action reads only public repository and language data returned by GitHub APIs; it does not upload or retain additional profile data.
+- The generated SVG and README change are committed to the user's own repository by the user's workflow.
+- Private repositories are not written to the generated chart through this Action's public repository query.
+
+## Content Boundaries
+
+- The chart reflects the current code-volume language mix of public repositories. It does not represent ability, proficiency, time spent, or personal identity.
+- GitHub, repository names, language data, and other third-party content in generated charts remain subject to their respective terms and rights notices.
+- Users are responsible for ensuring token permissions, generated content, and automated commits comply with their organization and repository rules.
+
 ## License
 
-This project is released under the [MIT License](./LICENSE), which permits use, modification, distribution, and commercial use provided that the license and copyright notice are retained.
+This project is released under the [MIT License](./LICENSE), which permits use, modification, distribution, and commercial use provided that the license and copyright notice are retained. GitHub data, GitHub Actions, third-party software, external services, and user-generated content are not automatically covered by the MIT License merely because this project reads, calls, or generates them; see [THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md).
 
 ## Feedback & Contributions
 
