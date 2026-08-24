@@ -142,7 +142,7 @@ The chart therefore represents the current code-volume language mix of included 
 | --- | --- | --- |
 | `owner` | Current repository owner | GitHub username whose repositories are scanned |
 | `profile_repository` | Current repository name | Profile repository to exclude automatically |
-| `excluded_repositories` | `[]` | Additional repository names to exclude |
+| `excluded_repositories` | `[]` | Repository names or `owner/repo` values to exclude, case-insensitively |
 | `include_archived` | `false` | Include archived repositories |
 | `include_forks` | `false` | Include forked repositories |
 | `max_named_languages` | `9` | Number of individually named languages before aggregation into `Other` |
@@ -166,7 +166,6 @@ The chart therefore represents the current code-volume language mix of included 
 | `donut_radius` | `72` | Donut radius |
 | `donut_width` | `22` | Donut stroke width |
 | `min_segment_percentage` | `0.5` | Minimum visible donut percentage for very small languages |
-| `round_segment_threshold` | `5` | Use rounded caps at or above this actual percentage; smaller segments use flat caps |
 | `show_bars` | `true` | Show percentage bars in the legend |
 | `show_center_label` | `true` | Show the leading language and percentage inside the donut |
 

@@ -2,8 +2,46 @@
 """SVG chart generation and geometry for language donut."""
 import html
 import math
+from collections import Counter
 
 from .colors import color_for, displayed_languages, percentage_label
+
+
+def visible_percentages(values, minimum_percentage):
+    """Return display percentages with a guaranteed minimum visible share."""
+    normalized = [max(0.0, float(value)) for value in values]
+    total = sum(normalized)
+    if total <= 0:
+        raise ValueError("language totals must contain at least one positive value")
+
+    actual = [value / total * 100 for value in normalized]
+    minimum = min(max(0.0, float(minimum_percentage)), 100 / len(actual))
+    if minimum <= 0:
+        return actual
+
+    result = [0.0] * len(actual)
+    remaining = set(range(len(actual)))
+    remaining_percentage = 100.0
+    while remaining:
+        remaining_total = sum(actual[index] for index in remaining)
+        scaled = {
+            index: actual[index] / remaining_total * remaining_percentage
+            for index in remaining
+        }
+        too_small = {
+            index for index, percentage in scaled.items() if percentage < minimum
+        }
+        if not too_small:
+            for index, percentage in scaled.items():
+                result[index] = percentage
+            break
+        for index in too_small:
+            result[index] = minimum
+        remaining.difference_update(too_small)
+        remaining_percentage = 100.0 - sum(result)
+
+    result[-1] += 100.0 - sum(result)
+    return result
 
 
 def polar_to_cartesian(center_x, center_y, radius, angle):
@@ -130,7 +168,16 @@ def annular_segment_path(
 
 
 def build_svg(totals, config):
-    total_bytes = sum(totals.values())
+    positive_totals = Counter(
+        {
+            str(language): int(byte_count)
+            for language, byte_count in totals.items()
+            if int(byte_count) > 0
+        }
+    )
+    total_bytes = sum(positive_totals.values())
+    if total_bytes <= 0:
+        raise ValueError("language totals must contain at least one positive value")
     chart = config["chart"]
     theme = config["theme"]
     colors = config["colors"]
@@ -141,7 +188,11 @@ def build_svg(totals, config):
     named_limit = max(1, capacity - 1)
     if config["max_languages"] > 0:
         named_limit = min(config["max_languages"], named_limit)
-    items = displayed_languages(totals, named_limit)
+    items = displayed_languages(positive_totals, named_limit)
+    display_percentages = visible_percentages(
+        [byte_count for _, byte_count in items],
+        chart.get("min_segment_percentage", 0),
+    )
 
     base_width = int(chart["width"])
     row_height = float(chart["row_height"])
@@ -180,10 +231,16 @@ def build_svg(totals, config):
     progress_angle = 0.0
     start_angle_offset = -math.pi / 2
 
-    for language, byte_count in items:
-        sweep_angle = byte_count / total_bytes * math.tau
+    for index, ((language, byte_count), display_percentage) in enumerate(
+        zip(items, display_percentages)
+    ):
+        sweep_angle = display_percentage / 100 * math.tau
         start_angle = start_angle_offset + progress_angle
-        end_angle = start_angle + sweep_angle
+        end_angle = (
+            start_angle_offset + math.tau
+            if index == len(items) - 1
+            else start_angle + sweep_angle
+        )
         path = annular_segment_path(
             center_x,
             center_y,

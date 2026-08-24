@@ -17,7 +17,6 @@ DEFAULT_CHART = {
     "donut_radius": 72,
     "donut_width": 22,
     "min_segment_percentage": 0.5,
-    "round_segment_threshold": 5,
     "show_bars": True,
     "show_center_label": True,
 }
@@ -43,26 +42,45 @@ DEFAULT_COLORS = {
 }
 
 
+def _object_section(raw, name):
+    value = raw.get(name, {})
+    if not isinstance(value, dict):
+        raise RuntimeError(f"configuration field '{name}' must be a JSON object")
+    return value
+
+
 def load_config(config_path: Path):
     raw = {}
     if config_path.exists():
         raw = json.loads(config_path.read_text(encoding="utf-8-sig"))
+    if not isinstance(raw, dict):
+        raise RuntimeError("configuration root must be a JSON object")
 
     chart = DEFAULT_CHART.copy()
-    chart.update(raw.get("chart", {}))
+    chart.update(_object_section(raw, "chart"))
     chart["donut_center_x"] = chart.get("ring_center_x", chart["donut_center_x"])
     chart["donut_radius"] = chart.get("ring_radius", chart["donut_radius"])
     chart["donut_width"] = chart.get("ring_width", chart["donut_width"])
 
     theme = DEFAULT_THEME.copy()
-    theme.update(raw.get("theme", {}))
+    theme.update(_object_section(raw, "theme"))
     colors = DEFAULT_COLORS.copy()
-    colors.update(raw.get("colors", {}))
+    colors.update(_object_section(raw, "colors"))
+
+    excluded_repositories = raw.get("excluded_repositories", [])
+    if not isinstance(excluded_repositories, list):
+        raise RuntimeError(
+            "configuration field 'excluded_repositories' must be a JSON array"
+        )
 
     return {
-        "owner": raw.get("owner", ""),
-        "profile_repository": raw.get("profile_repository", ""),
-        "excluded_repositories": set(raw.get("excluded_repositories", [])),
+        "owner": str(raw.get("owner", "")).strip(),
+        "profile_repository": str(raw.get("profile_repository", "")).strip(),
+        "excluded_repositories": {
+            str(repository).strip().casefold()
+            for repository in excluded_repositories
+            if str(repository).strip()
+        },
         "include_archived": bool(raw.get("include_archived", False)),
         "include_forks": bool(raw.get("include_forks", False)),
         "max_languages": int(

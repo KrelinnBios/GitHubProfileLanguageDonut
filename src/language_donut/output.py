@@ -21,22 +21,8 @@ def write_outputs(svg, readme_path, output_directory, output_prefix):
     if not re.fullmatch(r"[A-Za-z0-9._-]+", output_prefix):
         raise RuntimeError("output-prefix 只能包含字母、数字、点、下划线和连字符。")
 
-    output_directory.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:12]
     versioned_output = output_directory / f"{output_prefix}-{digest}.svg"
-    changed = write_text_if_changed(versioned_output, svg)
-
-    legacy_output = output_directory / f"{output_prefix}.svg"
-    if legacy_output.exists():
-        legacy_output.unlink()
-        changed = True
-
-    old_pattern = re.compile(rf"{re.escape(output_prefix)}-[0-9a-f]{{12}}\.svg")
-    for candidate in output_directory.glob(f"{output_prefix}-*.svg"):
-        if candidate != versioned_output and old_pattern.fullmatch(candidate.name):
-            candidate.unlink()
-            changed = True
-
     if not readme_path.exists():
         raise RuntimeError(f"找不到 README：{readme_path}")
 
@@ -56,6 +42,23 @@ def write_outputs(svg, readme_path, output_directory, output_prefix):
             f'`<img src="{placeholder}" alt="Language distribution" />`。'
         )
     updated = re.sub(pattern, current_reference, readme, count=1)
+
+    # Validate the README before changing generated files so a bad placeholder
+    # cannot leave the working tree in a partially updated state.
+    output_directory.mkdir(parents=True, exist_ok=True)
+    changed = write_text_if_changed(versioned_output, svg)
+
+    legacy_output = output_directory / f"{output_prefix}.svg"
+    if legacy_output.exists():
+        legacy_output.unlink()
+        changed = True
+
+    old_pattern = re.compile(rf"{re.escape(output_prefix)}-[0-9a-f]{{12}}\.svg")
+    for candidate in output_directory.glob(f"{output_prefix}-*.svg"):
+        if candidate != versioned_output and old_pattern.fullmatch(candidate.name):
+            candidate.unlink()
+            changed = True
+
     changed = write_text_if_changed(readme_path, updated) or changed
     return versioned_output, changed
 

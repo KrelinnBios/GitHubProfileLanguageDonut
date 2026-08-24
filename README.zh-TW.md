@@ -142,7 +142,7 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 | --- | --- | --- |
 | `owner` | 目前儲存庫擁有者 | 需要統計的 GitHub 使用者名稱 |
 | `profile_repository` | 目前儲存庫名稱 | 需要自動排除的個人首頁儲存庫名稱 |
-| `excluded_repositories` | `[]` | 額外排除的儲存庫名稱列表 |
+| `excluded_repositories` | `[]` | 額外排除的儲存庫名稱或 `owner/repo` 列表，不區分大小寫 |
 | `include_archived` | `false` | 是否包含已歸檔儲存庫 |
 | `include_forks` | `false` | 是否包含 Fork 儲存庫 |
 | `max_named_languages` | `9` | 個別顯示的語言數量，更多語言彙總為 `Other` |
@@ -166,7 +166,6 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 | `donut_radius` | `72` | 環形圖半徑 |
 | `donut_width` | `22` | 環形線寬 |
 | `min_segment_percentage` | `0.5` | 極小語言扇段在環形圖中的最低可見百分比 |
-| `round_segment_threshold` | `5` | 達到該真實百分比時使用圓潤端點，更小扇段使用平直端點 |
 | `show_bars` | `true` | 是否顯示語言佔比橫條 |
 | `show_center_label` | `true` | 是否顯示環形圖中心的首位語言與百分比 |
 

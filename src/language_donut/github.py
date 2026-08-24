@@ -40,6 +40,8 @@ def github_json(path):
         raise RuntimeError(
             f"GitHub API 请求失败（{error.code}）：{path}\n{detail}"
         ) from error
+    except urllib.error.URLError as error:
+        raise RuntimeError(f"GitHub API 请求失败：{error.reason}") from error
 
 
 def public_repositories(owner, profile_repository, config):
@@ -56,11 +58,17 @@ def public_repositories(owner, profile_repository, config):
         page += 1
 
     excluded = set(config["excluded_repositories"])
-    excluded.add(profile_repository)
+    excluded.add(profile_repository.casefold())
+
+    def is_excluded(repository):
+        name = repository["name"].casefold()
+        full_name = repository.get("full_name", f"{owner}/{repository['name']}")
+        return name in excluded or full_name.casefold() in excluded
+
     return [
         repository["name"]
         for repository in repositories
-        if repository["name"] not in excluded
+        if not is_excluded(repository)
         and (config["include_archived"] or not repository.get("archived", False))
         and (config["include_forks"] or not repository.get("fork", False))
     ]

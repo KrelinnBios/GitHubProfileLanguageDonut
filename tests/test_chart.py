@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
-from language_donut.chart import build_svg
+from language_donut.chart import build_svg, visible_percentages
 from language_donut.colors import generated_color
 from language_donut.config import DEFAULT_CHART, DEFAULT_COLORS, DEFAULT_THEME
 
@@ -91,6 +91,17 @@ class BuildSvgTests(unittest.TestCase):
         self.assertEqual(3, len(re.findall(r'<path class="segment"', svg)))
         for color in ("#7F52FF", "#22C55E", "#EC4899"):
             self.assertIn(f'fill="{color}"', svg)
+
+    def test_tiny_segments_receive_the_configured_minimum_share(self):
+        percentages = visible_percentages([9990, 10], 0.5)
+
+        self.assertAlmostEqual(99.5, percentages[0])
+        self.assertAlmostEqual(0.5, percentages[1])
+        self.assertAlmostEqual(100.0, sum(percentages))
+
+    def test_empty_totals_have_a_clear_error(self):
+        with self.assertRaisesRegex(ValueError, "at least one positive value"):
+            build_svg(Counter(), config())
 
     def test_current_language_palette_uses_distinct_colors(self):
         languages = (

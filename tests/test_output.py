@@ -29,6 +29,23 @@ class OutputTests(unittest.TestCase):
             self.assertFalse(old_image.exists())
             self.assertIn(image.name, readme.read_text(encoding="utf-8"))
 
+    def test_missing_placeholder_does_not_mutate_generated_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            readme = root / "README.md"
+            old_image = root / "language-donut-000000000000.svg"
+            readme.write_text("# Profile", encoding="utf-8")
+            old_image.write_text("old", encoding="utf-8")
+
+            with self.assertRaisesRegex(RuntimeError, "没有找到环形图引用"):
+                write_outputs("<svg></svg>", readme, root, "language-donut")
+
+            self.assertTrue(old_image.exists())
+            self.assertEqual(
+                [old_image],
+                sorted(root.glob("language-donut-*.svg")),
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
