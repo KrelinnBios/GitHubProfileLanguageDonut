@@ -11,6 +11,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -20,41 +24,58 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read and validate version
-        id: version
+      - name: Create GitHub release
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
+
           version=$(tr -d '[:space:]' < .github/release-version)
+          if [[ "$version" == "unreleased" ]]; then
+            echo "Release automation is ready; no version has been selected yet."
+            exit 0
+          fi
           if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Invalid release version: $version" >&2
             exit 1
           fi
-          echo "value=$version" >> "$GITHUB_OUTPUT"
+          if gh release view "$version" >/dev/null 2>&1; then
+            echo "$version is already published"
+            exit 0
+          fi
 
-      - name: Create version tag
-        env:
-          VERSION: ${{ steps.version.outputs.value }}
-        run: |
-          if git show-ref --tags --verify --quiet "refs/tags/$VERSION"; then
-            tagged_commit=$(git rev-list -n 1 "$VERSION")
+          previous_tag=$(gh api \
+            "repos/$GITHUB_REPOSITORY/releases/latest" \
+            --jq '.tag_name' 2>/dev/null || true)
+
+          if git show-ref --tags --verify --quiet "refs/tags/$version"; then
+            tagged_commit=$(git rev-list -n 1 "$version")
             if [[ "$tagged_commit" != "$GITHUB_SHA" ]]; then
-              echo "$VERSION already points to $tagged_commit" >&2
+              echo "$version already points to $tagged_commit" >&2
               exit 1
             fi
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -a "$VERSION" -m "$VERSION"
-            git push origin "$VERSION"
+            git tag -a "$version" -m "$version"
+            git push origin "$version"
           fi
 
-      - name: Create GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.version.outputs.value }}
-        run: |
-          if gh release view "$VERSION" >/dev/null 2>&1; then
-            echo "$VERSION is already published"
-          else
-            gh release create "$VERSION" --verify-tag --generate-notes
+          range="$GITHUB_SHA"
+          if [[ -n "$previous_tag" && "$previous_tag" != "$version" ]] && \
+             git rev-parse --verify --quiet "refs/tags/$previous_tag" >/dev/null && \
+             git merge-base --is-ancestor "$previous_tag" "$GITHUB_SHA"; then
+            range="$previous_tag..$GITHUB_SHA"
           fi
+
+          git log --format='%s' "$range" | \
+            awk 'NF && !seen[$0]++ { print "- " $0 }' > release-notes.md
+          if [[ ! -s release-notes.md ]]; then
+            printf '%s\n' "- $version" > release-notes.md
+          fi
+
+          gh release create "$version" \
+            --verify-tag \
+            --title "$version" \
+            --notes-file release-notes.md
