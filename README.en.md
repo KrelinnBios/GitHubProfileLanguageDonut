@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/KrelinnBios/github-profile-language-donut/releases"><img src="https://img.shields.io/github/v/release/KrelinnBios/github-profile-language-donut?style=flat-square&label=release&color=7F52FF" alt="Latest release"></a>
+  <a href="https://github.com/KrelinnBios/GitHubProfileLanguageDonut/releases"><img src="https://img.shields.io/github/v/release/KrelinnBios/GitHubProfileLanguageDonut?style=flat-square&label=release&color=7F52FF" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/platform-GitHub%20Actions-247344?style=flat-square" alt="GitHub Actions">
   <img src="https://img.shields.io/badge/license-MIT-1f5f9c?style=flat-square" alt="MIT License">
 </p>
@@ -95,13 +95,13 @@ The core steps resolve and check out the latest stable release at runtime:
   env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   run: |
-    release_tag=$(gh api repos/KrelinnBios/github-profile-language-donut/releases/latest --jq .tag_name)
+    release_tag=$(gh api repos/KrelinnBios/GitHubProfileLanguageDonut/releases/latest --jq .tag_name)
     echo tag=$release_tag >> $GITHUB_OUTPUT
 
 - name: Check out language donut action
   uses: actions/checkout@v7
   with:
-    repository: KrelinnBios/github-profile-language-donut
+    repository: KrelinnBios/GitHubProfileLanguageDonut
     ref: ${{ steps.language-donut-release.outputs.tag }}
     path: .github/actions/github-profile-language-donut
 
@@ -233,7 +233,7 @@ Scheduled updates require no cross-repo tokens. For immediate refreshes, click *
 ## Versioning & Security
 
 - Latest stable release: use the workflow above to resolve and check out the latest stable release through the Releases API.
-- Full release tag: select and pin one from [Releases](https://github.com/KrelinnBios/github-profile-language-donut/releases) when upgrades should remain explicit.
+- Full release tag: select and pin one from [Releases](https://github.com/KrelinnBios/GitHubProfileLanguageDonut/releases) when upgrades should remain explicit.
 - Full commit SHA: provides the strictest supply-chain reproducibility but requires manual update tracking.
 
 The profile workflow uses `contents: write` only to commit the generated SVG and README. The Action does not write to other repositories.
@@ -284,4 +284,4 @@ This project is released under the [MIT License](./LICENSE), which permits use, 
 
 ## Feedback & Contributions
 
-Issues, layout compatibility reports, language color suggestions, documentation improvements, and feature requests are welcome through [GitHub Issues](https://github.com/KrelinnBios/github-profile-language-donut/issues).
+Issues, layout compatibility reports, language color suggestions, documentation improvements, and feature requests are welcome through [GitHub Issues](https://github.com/KrelinnBios/GitHubProfileLanguageDonut/issues).
