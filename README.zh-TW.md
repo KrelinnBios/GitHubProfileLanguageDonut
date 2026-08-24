@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/KrelinnBios/github-profile-language-donut/releases"><img src="https://img.shields.io/github/v/release/KrelinnBios/github-profile-language-donut?style=flat-square&label=%E7%89%88%E6%9C%AC&color=7F52FF" alt="最新版本"></a>
+  <a href="https://github.com/KrelinnBios/GitHubProfileLanguageDonut/releases"><img src="https://img.shields.io/github/v/release/KrelinnBios/GitHubProfileLanguageDonut?style=flat-square&label=%E7%89%88%E6%9C%AC&color=7F52FF" alt="最新版本"></a>
   <img src="https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-GitHub%20Actions-247344?style=flat-square" alt="GitHub Actions">
   <img src="https://img.shields.io/badge/%E6%8E%88%E6%AC%8A-MIT-1f5f9c?style=flat-square" alt="MIT License">
 </p>
@@ -95,13 +95,13 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
   env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   run: |
-    release_tag=$(gh api repos/KrelinnBios/github-profile-language-donut/releases/latest --jq .tag_name)
+    release_tag=$(gh api repos/KrelinnBios/GitHubProfileLanguageDonut/releases/latest --jq .tag_name)
     echo tag=$release_tag >> $GITHUB_OUTPUT
 
 - name: Check out language donut action
   uses: actions/checkout@v7
   with:
-    repository: KrelinnBios/github-profile-language-donut
+    repository: KrelinnBios/GitHubProfileLanguageDonut
     ref: ${{ steps.language-donut-release.outputs.tag }}
     path: .github/actions/github-profile-language-donut
 
@@ -233,7 +233,7 @@ Action 只在 SVG 內容、README 連結或舊圖檔案發生變化時輸出 `ch
 ## 版本選擇與安全
 
 - 最新正式版：建議使用上方工作流程，透過 Releases API 自動解析並簽出最新正式版本。
-- 完整版本標籤：可從 [Releases](https://github.com/KrelinnBios/github-profile-language-donut/releases) 選擇並固定，升級時由使用者決定。
+- 完整版本標籤：可從 [Releases](https://github.com/KrelinnBios/GitHubProfileLanguageDonut/releases) 選擇並固定，升級時由使用者決定。
 - 固定提交 SHA：可獲得最嚴格的供應鏈可重複性，但需要手動追蹤更新。
 
 首頁工作流程中的 `contents: write` 用於提交產生的 SVG 和 README；Action 本身不會向其他儲存庫寫入內容。
@@ -284,4 +284,4 @@ python -m unittest discover -s tests -v
 
 ## 回饋與貢獻
 
-歡迎透過 [GitHub Issues](https://github.com/KrelinnBios/github-profile-language-donut/issues) 提交使用問題、版面相容問題、新語言配色建議、文件改善或其他功能建議。
+歡迎透過 [GitHub Issues](https://github.com/KrelinnBios/GitHubProfileLanguageDonut/issues) 提交使用問題、版面相容問題、新語言配色建議、文件改善或其他功能建議。
