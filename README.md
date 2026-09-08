@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>仓库语言 · 自适应布局 · 自动更新</strong><br>
-  为 GitHub 个人主页生成简洁、可配置的语言占比环形图
+  为个人主页生成简洁、可配置的语言占比环形图
 </p>
 
 <p align="center">
