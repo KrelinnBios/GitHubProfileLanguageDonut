@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>Repository languages · Adaptive layout · Automatic updates</strong><br>
-  Generate a clean, configurable language donut chart for your GitHub profile README
+  Generate a clean, configurable language donut chart for your profile README
 </p>
 
 <p align="center">
