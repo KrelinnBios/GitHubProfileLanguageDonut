@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>儲存庫語言 · 自適應版面 · 自動更新</strong><br>
-  為 GitHub 個人首頁產生簡潔、可設定的語言佔比環形圖
+  為個人首頁產生簡潔、可設定的語言佔比環形圖
 </p>
 
 <p align="center">
