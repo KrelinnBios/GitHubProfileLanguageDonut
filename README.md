@@ -31,7 +31,7 @@ GitHub Profile Language Donut Chart 是一个可复用的 GitHub Action。它读
 - 样式配置：可调整画布、边距、图例、环形图尺寸与配色。
 - 清晰配色：为新语言稳定分配颜色，并保留极小占比扇段。
 - 缓存更新：用内容摘要生成版本化文件名，并自动清理旧图。
-- 数据范围：默认纳入个人主页仓库；Fork 和归档仓库仍默认排除，也可按需调整。
+- 数据范围：默认纳入个人主页仓库和已归档仓库，仅排除 Fork；也可按需调整。
 - 轻量运行：生成器仅依赖 Python 标准库，可直接在托管运行器执行。
 
 ## 效果预览
@@ -122,8 +122,8 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
 
 默认统计范围是指定账号拥有的公开仓库，并遵循以下规则：
 
-- 默认纳入个人主页仓库本身。
-- 默认排除 Fork 仓库和已归档仓库。
+- 默认纳入个人主页仓库和已归档仓库。
+- 默认排除 Fork 仓库。
 - `excluded_repositories` 中列出的仓库不会参与统计。
 - 私有仓库不会包含在公开用户仓库接口返回的数据中。
 - 每个仓库的语言数据来自 GitHub Languages API，数值表示 GitHub Linguist 识别出的语言字节数。
@@ -141,7 +141,7 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
 | --- | --- | --- |
 | `owner` | 当前仓库所有者 | 需要统计的 GitHub 用户名 |
 | `excluded_repositories` | `[]` | 额外排除的仓库名或 `owner/repo` 列表，大小写不敏感 |
-| `include_archived` | `false` | 是否包含已归档仓库 |
+| `include_archived` | `true` | 是否包含已归档仓库 |
 | `include_forks` | `false` | 是否包含 Fork 仓库 |
 | `max_named_languages` | `9` | 单独显示的语言数量，更多语言汇总为 `Other` |
 

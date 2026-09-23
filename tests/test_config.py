@@ -43,6 +43,13 @@ class ConfigTests(unittest.TestCase):
             self.assertNotIn("profile_repository", result)
             self.assertEqual(set(), result["excluded_repositories"])
 
+    def test_archived_repositories_are_included_by_default(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = load_config(Path(directory) / "config.json")
+
+            self.assertTrue(result["include_archived"])
+            self.assertFalse(result["include_forks"])
+
     def test_configuration_root_must_be_an_object(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "config.json"

@@ -31,7 +31,7 @@ It is intended for GitHub users who want to present the language mix of their cu
 - Appearance options: adjusts the canvas, spacing, legend, donut size, and colors.
 - Clear colors: assigns stable colors to new languages and preserves tiny slices.
 - Cache updates: creates content-hashed filenames and removes older charts automatically.
-- Data scope: includes the profile repository by default; forked and archived repositories remain excluded by default.
+- Data scope: includes the profile and archived repositories by default; forked repositories are excluded.
 - Lightweight runtime: uses only the Python standard library on GitHub-hosted runners.
 
 ## Preview
@@ -122,8 +122,8 @@ Open the profile repository's **Actions** page, select the update workflow, and 
 
 By default, the Action scans public repositories owned by the configured account and applies these rules:
 
-- The profile repository itself is included by default.
-- Forked and archived repositories are excluded by default.
+- The profile repository and archived repositories are included by default.
+- Forked repositories are excluded by default.
 - Repositories listed in `excluded_repositories` are excluded.
 - Private repositories are not returned by the public user repository endpoint.
 - Per-repository language values come from the GitHub Languages API and represent byte counts identified by GitHub Linguist.
@@ -141,7 +141,7 @@ The chart therefore represents the current code-volume language mix of included 
 | --- | --- | --- |
 | `owner` | Current repository owner | GitHub username whose repositories are scanned |
 | `excluded_repositories` | `[]` | Repository names or `owner/repo` values to exclude, case-insensitively |
-| `include_archived` | `false` | Include archived repositories |
+| `include_archived` | `true` | Include archived repositories |
 | `include_forks` | `false` | Include forked repositories |
 | `max_named_languages` | `9` | Number of individually named languages before aggregation into `Other` |
 

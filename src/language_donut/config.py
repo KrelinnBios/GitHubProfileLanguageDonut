@@ -80,7 +80,7 @@ def load_config(config_path: Path):
             for repository in excluded_repositories
             if str(repository).strip()
         },
-        "include_archived": bool(raw.get("include_archived", False)),
+        "include_archived": bool(raw.get("include_archived", True)),
         "include_forks": bool(raw.get("include_forks", False)),
         "max_languages": int(
             raw.get("max_named_languages", raw.get("max_languages", 9))

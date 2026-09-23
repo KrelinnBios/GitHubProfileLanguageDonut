@@ -29,6 +29,27 @@ class PublicRepositoryTests(unittest.TestCase):
         config["excluded_repositories"].add("owner/profile")
         self.assertEqual(["Visible"], public_repositories("Owner", config))
 
+    @patch("language_donut.github.github_json")
+    def test_archived_repositories_are_included_and_forks_excluded(self, request):
+        request.return_value = [
+            {"name": "Profile", "full_name": "Owner/Profile"},
+            {
+                "name": "Archived",
+                "full_name": "Owner/Archived",
+                "archived": True,
+            },
+            {"name": "Fork", "full_name": "Owner/Fork", "fork": True},
+        ]
+        config = {
+            "excluded_repositories": set(),
+            "include_archived": True,
+            "include_forks": False,
+        }
+
+        repositories = public_repositories("Owner", config)
+
+        self.assertEqual(["Profile", "Archived"], repositories)
+
 
 if __name__ == "__main__":
     unittest.main()

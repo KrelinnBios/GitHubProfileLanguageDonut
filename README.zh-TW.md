@@ -31,7 +31,7 @@ GitHub Profile Language Donut Chart 是一個可重複使用的 GitHub Action。
 - 樣式設定：可調整畫布、邊距、圖例、環形圖尺寸與配色。
 - 清晰配色：為新語言穩定分配顏色，並保留極小佔比扇段。
 - 快取更新：以內容摘要產生版本化檔名，並自動清理舊圖。
-- 資料範圍：預設納入個人首頁儲存庫；Fork 和已歸檔儲存庫仍預設排除，也可依需求調整。
+- 資料範圍：預設納入個人首頁和已歸檔儲存庫，僅排除 Fork；也可依需求調整。
 - 輕量執行：產生器僅依賴 Python 標準函式庫，可直接在託管執行器執行。
 
 ## 效果預覽
@@ -122,8 +122,8 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 
 預設統計範圍是指定帳號擁有的公開儲存庫，並遵循以下規則：
 
-- 預設納入個人首頁儲存庫本身。
-- 預設排除 Fork 儲存庫和已歸檔儲存庫。
+- 預設納入個人首頁和已歸檔儲存庫。
+- 預設排除 Fork 儲存庫。
 - `excluded_repositories` 中列出的儲存庫不會參與統計。
 - 私有儲存庫不會包含在公開使用者儲存庫 API回傳的資料中。
 - 每個儲存庫的語言資料來自 GitHub Languages API，數值表示 GitHub Linguist 識別出的語言位元組數。
@@ -141,7 +141,7 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 | --- | --- | --- |
 | `owner` | 目前儲存庫擁有者 | 需要統計的 GitHub 使用者名稱 |
 | `excluded_repositories` | `[]` | 額外排除的儲存庫名稱或 `owner/repo` 列表，不區分大小寫 |
-| `include_archived` | `false` | 是否包含已歸檔儲存庫 |
+| `include_archived` | `true` | 是否包含已歸檔儲存庫 |
 | `include_forks` | `false` | 是否包含 Fork 儲存庫 |
 | `max_named_languages` | `9` | 個別顯示的語言數量，更多語言彙總為 `Other` |
 
