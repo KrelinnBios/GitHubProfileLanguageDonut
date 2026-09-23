@@ -30,6 +30,19 @@ class ConfigTests(unittest.TestCase):
                 {"owner/hidden", "repo"}, result["excluded_repositories"]
             )
 
+    def test_legacy_profile_repository_field_is_ignored(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_text(
+                json.dumps({"owner": "Owner", "profile_repository": "Owner"}),
+                encoding="utf-8",
+            )
+
+            result = load_config(path)
+
+            self.assertNotIn("profile_repository", result)
+            self.assertEqual(set(), result["excluded_repositories"])
+
     def test_configuration_root_must_be_an_object(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "config.json"

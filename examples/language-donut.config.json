@@ -1,6 +1,5 @@
 {
   "owner": "YOUR_GITHUB_USERNAME",
-  "profile_repository": "YOUR_GITHUB_USERNAME",
   "excluded_repositories": [],
   "max_named_languages": 9,
   "chart": {

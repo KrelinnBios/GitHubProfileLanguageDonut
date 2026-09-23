@@ -8,17 +8,16 @@ from collections import Counter
 API_ROOT = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
 
 
-def repository_context(config):
+def repository_owner(config):
     repository = os.environ.get("GITHUB_REPOSITORY", "")
     context_owner = os.environ.get("GITHUB_REPOSITORY_OWNER", "")
-    context_repository = ""
     if "/" in repository:
-        context_owner, context_repository = repository.split("/", 1)
+        context_owner = repository.split("/", 1)[0]
 
     owner = config["owner"] or context_owner
     if not owner:
         raise RuntimeError("无法确定 GitHub 用户名，请在配置中设置 owner。")
-    return owner, config["profile_repository"] or context_repository or owner
+    return owner
 
 
 def github_json(path):
@@ -44,7 +43,7 @@ def github_json(path):
         raise RuntimeError(f"GitHub API 请求失败：{error.reason}") from error
 
 
-def public_repositories(owner, profile_repository, config):
+def public_repositories(owner, config):
     repositories = []
     page = 1
     while True:
@@ -58,7 +57,6 @@ def public_repositories(owner, profile_repository, config):
         page += 1
 
     excluded = set(config["excluded_repositories"])
-    excluded.add(profile_repository.casefold())
 
     def is_excluded(repository):
         name = repository["name"].casefold()
@@ -74,9 +72,9 @@ def public_repositories(owner, profile_repository, config):
     ]
 
 
-def language_totals(owner, profile_repository, config):
+def language_totals(owner, config):
     totals = Counter()
-    for repository in public_repositories(owner, profile_repository, config):
+    for repository in public_repositories(owner, config):
         totals.update(github_json(f"/repos/{owner}/{repository}/languages"))
     if not totals:
         raise RuntimeError("GitHub 没有返回可用于生成图表的语言数据。")

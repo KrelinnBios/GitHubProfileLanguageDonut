@@ -75,7 +75,6 @@ def load_config(config_path: Path):
 
     return {
         "owner": str(raw.get("owner", "")).strip(),
-        "profile_repository": str(raw.get("profile_repository", "")).strip(),
         "excluded_repositories": {
             str(repository).strip().casefold()
             for repository in excluded_repositories

@@ -31,7 +31,7 @@ GitHub Profile Language Donut Chart 是一个可复用的 GitHub Action。它读
 - 样式配置：可调整画布、边距、图例、环形图尺寸与配色。
 - 清晰配色：为新语言稳定分配颜色，并保留极小占比扇段。
 - 缓存更新：用内容摘要生成版本化文件名，并自动清理旧图。
-- 数据范围：默认排除主页、Fork 和归档仓库，也可按需调整。
+- 数据范围：默认纳入个人主页仓库；Fork 和归档仓库仍默认排除，也可按需调整。
 - 轻量运行：生成器仅依赖 Python 标准库，可直接在托管运行器执行。
 
 ## 效果预览
@@ -76,12 +76,11 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
 
 ```json
 {
-  "owner": "YOUR_GITHUB_USERNAME",
-  "profile_repository": "YOUR_GITHUB_USERNAME"
+  "owner": "YOUR_GITHUB_USERNAME"
 }
 ```
 
-在与用户名同名的个人主页仓库中，这两个字段也可以省略，Action 会读取当前仓库上下文。
+在与用户名同名的个人主页仓库中，`owner` 字段也可以省略，Action 会读取当前仓库上下文。
 
 ### 4. 添加更新工作流
 
@@ -123,7 +122,7 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
 
 默认统计范围是指定账号拥有的公开仓库，并遵循以下规则：
 
-- 自动排除个人主页仓库本身。
+- 默认纳入个人主页仓库本身。
 - 默认排除 Fork 仓库和已归档仓库。
 - `excluded_repositories` 中列出的仓库不会参与统计。
 - 私有仓库不会包含在公开用户仓库接口返回的数据中。
@@ -141,11 +140,12 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
 | 字段 | 默认值 | 说明 |
 | --- | --- | --- |
 | `owner` | 当前仓库所有者 | 需要统计的 GitHub 用户名 |
-| `profile_repository` | 当前仓库名 | 需要自动排除的个人主页仓库名 |
 | `excluded_repositories` | `[]` | 额外排除的仓库名或 `owner/repo` 列表，大小写不敏感 |
 | `include_archived` | `false` | 是否包含已归档仓库 |
 | `include_forks` | `false` | 是否包含 Fork 仓库 |
 | `max_named_languages` | `9` | 单独显示的语言数量，更多语言汇总为 `Other` |
+
+旧配置中的 `profile_repository` 字段会被忽略。如需排除个人主页仓库，请将其加入 `excluded_repositories`。
 
 ### `chart` 图表布局
 

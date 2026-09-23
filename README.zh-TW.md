@@ -31,7 +31,7 @@ GitHub Profile Language Donut Chart 是一個可重複使用的 GitHub Action。
 - 樣式設定：可調整畫布、邊距、圖例、環形圖尺寸與配色。
 - 清晰配色：為新語言穩定分配顏色，並保留極小佔比扇段。
 - 快取更新：以內容摘要產生版本化檔名，並自動清理舊圖。
-- 資料範圍：預設排除首頁、Fork 和已歸檔儲存庫，也可依需求調整。
+- 資料範圍：預設納入個人首頁儲存庫；Fork 和已歸檔儲存庫仍預設排除，也可依需求調整。
 - 輕量執行：產生器僅依賴 Python 標準函式庫，可直接在託管執行器執行。
 
 ## 效果預覽
@@ -76,12 +76,11 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 
 ```json
 {
-  "owner": "YOUR_GITHUB_USERNAME",
-  "profile_repository": "YOUR_GITHUB_USERNAME"
+  "owner": "YOUR_GITHUB_USERNAME"
 }
 ```
 
-在與使用者名稱同名的個人首頁儲存庫中，這兩個欄位也可以省略，Action 會讀取目前儲存庫上下文。
+在與使用者名稱同名的個人首頁儲存庫中，`owner` 欄位也可以省略，Action 會讀取目前儲存庫上下文。
 
 ### 4. 新增更新工作流程
 
@@ -123,7 +122,7 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 
 預設統計範圍是指定帳號擁有的公開儲存庫，並遵循以下規則：
 
-- 自動排除個人首頁儲存庫本身。
+- 預設納入個人首頁儲存庫本身。
 - 預設排除 Fork 儲存庫和已歸檔儲存庫。
 - `excluded_repositories` 中列出的儲存庫不會參與統計。
 - 私有儲存庫不會包含在公開使用者儲存庫 API回傳的資料中。
@@ -141,11 +140,12 @@ GitHub 個人首頁 README 來自與使用者名稱同名的公開儲存庫。�
 | 欄位 | 預設值 | 說明 |
 | --- | --- | --- |
 | `owner` | 目前儲存庫擁有者 | 需要統計的 GitHub 使用者名稱 |
-| `profile_repository` | 目前儲存庫名稱 | 需要自動排除的個人首頁儲存庫名稱 |
 | `excluded_repositories` | `[]` | 額外排除的儲存庫名稱或 `owner/repo` 列表，不區分大小寫 |
 | `include_archived` | `false` | 是否包含已歸檔儲存庫 |
 | `include_forks` | `false` | 是否包含 Fork 儲存庫 |
 | `max_named_languages` | `9` | 個別顯示的語言數量，更多語言彙總為 `Other` |
+
+舊設定中的 `profile_repository` 欄位會被忽略。如需排除個人首頁儲存庫，請將其加入 `excluded_repositories`。
 
 ### `chart` 圖表版面
 

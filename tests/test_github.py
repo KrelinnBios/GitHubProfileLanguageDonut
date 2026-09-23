@@ -22,9 +22,12 @@ class PublicRepositoryTests(unittest.TestCase):
             "include_forks": False,
         }
 
-        repositories = public_repositories("Owner", "profile", config)
+        repositories = public_repositories("Owner", config)
 
-        self.assertEqual(["Visible"], repositories)
+        self.assertEqual(["Profile", "Visible"], repositories)
+
+        config["excluded_repositories"].add("owner/profile")
+        self.assertEqual(["Visible"], public_repositories("Owner", config))
 
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ It is intended for GitHub users who want to present the language mix of their cu
 - Appearance options: adjusts the canvas, spacing, legend, donut size, and colors.
 - Clear colors: assigns stable colors to new languages and preserves tiny slices.
 - Cache updates: creates content-hashed filenames and removes older charts automatically.
-- Data scope: excludes profile, forked, and archived repositories by default, with overrides available.
+- Data scope: includes the profile repository by default; forked and archived repositories remain excluded by default.
 - Lightweight runtime: uses only the Python standard library on GitHub-hosted runners.
 
 ## Preview
@@ -76,12 +76,11 @@ A minimal configuration is:
 
 ```json
 {
-  "owner": "YOUR_GITHUB_USERNAME",
-  "profile_repository": "YOUR_GITHUB_USERNAME"
+  "owner": "YOUR_GITHUB_USERNAME"
 }
 ```
 
-Both fields may be omitted when the workflow runs in a profile repository that matches the username; the Action then reads the current repository context.
+The `owner` field may be omitted when the workflow runs in a profile repository that matches the username; the Action then reads the current repository context.
 
 ### 4. Add the update workflow
 
@@ -123,7 +122,7 @@ Open the profile repository's **Actions** page, select the update workflow, and 
 
 By default, the Action scans public repositories owned by the configured account and applies these rules:
 
-- The profile repository itself is excluded automatically.
+- The profile repository itself is included by default.
 - Forked and archived repositories are excluded by default.
 - Repositories listed in `excluded_repositories` are excluded.
 - Private repositories are not returned by the public user repository endpoint.
@@ -141,11 +140,12 @@ The chart therefore represents the current code-volume language mix of included 
 | Field | Default | Description |
 | --- | --- | --- |
 | `owner` | Current repository owner | GitHub username whose repositories are scanned |
-| `profile_repository` | Current repository name | Profile repository to exclude automatically |
 | `excluded_repositories` | `[]` | Repository names or `owner/repo` values to exclude, case-insensitively |
 | `include_archived` | `false` | Include archived repositories |
 | `include_forks` | `false` | Include forked repositories |
 | `max_named_languages` | `9` | Number of individually named languages before aggregation into `Other` |
+
+The legacy `profile_repository` field is ignored. To exclude the profile repository, add its name to `excluded_repositories`.
 
 ### `chart` layout options
 

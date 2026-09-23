@@ -6,7 +6,7 @@ from pathlib import Path
 
 from language_donut.chart import build_svg
 from language_donut.config import load_config
-from language_donut.github import language_totals, repository_context
+from language_donut.github import language_totals, repository_owner
 from language_donut.output import set_action_outputs, write_outputs
 
 
@@ -22,8 +22,8 @@ def parse_args():
 def main():
     args = parse_args()
     config = load_config(Path(args.config))
-    owner, profile_repository = repository_context(config)
-    totals = language_totals(owner, profile_repository, config)
+    owner = repository_owner(config)
+    totals = language_totals(owner, config)
     image, changed = write_outputs(
         build_svg(totals, config),
         Path(args.readme),
