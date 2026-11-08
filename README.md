@@ -21,7 +21,7 @@
 
 GitHub Profile Language Donut Chart 是一个可复用的 GitHub Action。它读取账号名下公开仓库的语言数据，生成适合放在个人主页 README 中的 SVG 环形图，并自动维护 README 内的图片引用。
 
-项目适合希望展示当前开源项目语言构成、又不想依赖外部图片服务的 GitHub 用户。生成结果直接保存在自己的主页仓库中，样式和更新方式都由使用者控制。
+生成的 SVG 保存在个人主页仓库中，可自行配置样式和更新方式。
 
 ## 功能概览
 
@@ -112,7 +112,7 @@ GitHub 个人主页 README 来自与用户名同名的公开仓库。例如用�
     config-path: language-donut.config.json
 ```
 
-示例工作流每 6 小时自动运行，也支持手动运行；每次运行都会解析最新正式版本，无需配置跨仓库 Token。
+示例工作流每 6 小时运行一次，也可手动触发。
 
 ### 5. 首次运行
 
@@ -208,7 +208,7 @@ SVG 使用 `prefers-color-scheme` 自动切换，不需要分别生成两张图�
 
 Action 只在 SVG 内容、README 引用或旧图文件发生变化时输出 `changed=true`，因此相同数据不会产生重复提交。
 
-定时更新无需配置任何跨仓库 Token，语言数据变化不频繁时完全够用。如需更高实时性，可手动点击 **Run workflow** 立即更新。
+无需另行配置跨仓库 Token；需要立即更新时可手动点击 **Run workflow**。
 
 ## Action 输入与输出
 
