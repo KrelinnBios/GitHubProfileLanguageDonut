@@ -21,7 +21,7 @@
 
 GitHub Profile Language Donut Chart is a reusable GitHub Action. It reads language data from public repositories owned by an account, generates an SVG donut chart for a profile README, and keeps the image reference in that README up to date.
 
-It is intended for GitHub users who want to present the language mix of their current open-source projects without depending on an external image service. The generated asset stays in your own profile repository, so you control both its appearance and update workflow.
+The generated SVG is stored in your profile repository, where its appearance and update workflow can be configured.
 
 ## Features
 
@@ -112,7 +112,7 @@ The core steps resolve and check out the latest stable release at runtime:
     config-path: language-donut.config.json
 ```
 
-The example runs automatically every 6 hours and can also be triggered manually. Each run resolves the latest stable release, and no cross-repository token is required.
+The example workflow runs every 6 hours and can also be triggered manually.
 
 ### 5. Run it for the first time
 
@@ -208,7 +208,7 @@ The example profile workflow runs when:
 
 The Action reports `changed=true` only when the SVG content, README reference, or old generated files change. Identical data does not create duplicate commits.
 
-Scheduled updates require no cross-repo tokens. For immediate refreshes, click **Run workflow** manually.
+No separate cross-repository token is needed. Click **Run workflow** for an immediate refresh.
 
 ## Action Inputs & Outputs
 
