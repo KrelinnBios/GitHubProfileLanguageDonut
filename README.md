@@ -19,9 +19,7 @@
 
 ## 项目简介
 
-GitHub Profile Language Donut Chart 是一个可复用的 GitHub Action。它读取账号名下公开仓库的语言数据，生成适合放在个人主页 README 中的 SVG 环形图，并自动维护 README 内的图片引用。
-
-生成的 SVG 保存在个人主页仓库中，可自行配置样式和更新方式。
+GitHub Profile Language Donut Chart 是一个可复用的 GitHub Action。它读取账号名下公开仓库的语言数据，生成适合放在个人主页 README 中的 SVG 环形图，并自动维护 README 内的图片引用。生成的 SVG 保存在个人主页仓库中，可自行配置样式和更新方式。
 
 ## 功能概览
 
